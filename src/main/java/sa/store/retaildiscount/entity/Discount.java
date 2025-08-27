@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Document(collection = "discounts")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,4 +24,5 @@ public class Discount {
     private LocalDateTime endDate;
     private Boolean active;
     private String applicableCategory;
+    private String discountType;
 }

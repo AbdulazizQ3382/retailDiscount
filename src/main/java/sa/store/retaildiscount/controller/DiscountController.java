@@ -20,7 +20,7 @@ public class DiscountController {
 
     private final Logger log = org.slf4j.LoggerFactory.getLogger(DiscountController.class);
 
-    @PostMapping("/calculate")
+    @PostMapping("")
     public ResponseEntity<DiscountResponse> calculateDiscount(@RequestBody BillRequest billRequest) {
 
         log.info("Received discount calculation request for customer: {}", billRequest.getCustomerId());

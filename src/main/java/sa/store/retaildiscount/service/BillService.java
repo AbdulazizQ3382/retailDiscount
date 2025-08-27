@@ -11,6 +11,7 @@ import sa.store.retaildiscount.dto.BillRequest;
 import sa.store.retaildiscount.dto.DiscountResponse;
 import sa.store.retaildiscount.entity.Bill;
 import sa.store.retaildiscount.entity.BillItemEntity;
+import sa.store.retaildiscount.entity.Discount;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,6 +39,8 @@ public class BillService {
         // Save bill to database
         Bill bill = createBillFromRequest(billRequest, discountResponse);
         Bill savedBill = mongoTemplate.save(bill);
+
+
         
         log.info("Bill saved with ID: {}", savedBill.getId());
         
@@ -48,6 +51,7 @@ public class BillService {
         List<BillItemEntity> billItems = billRequest.getItems().stream()
                 .map(this::convertToBillItemEntity)
                 .collect(Collectors.toList());
+
 
         return new Bill(
                 null,
@@ -60,6 +64,8 @@ public class BillService {
                 discountResponse.getAppliedDiscountCode(),
                 discountResponse.getDiscountDescription(),
                 LocalDateTime.now(),
+                List.of(new Discount(null,"new discount","new discount",discountResponse.getDiscountAmount(),discountResponse.getDiscountAmount(),LocalDateTime.now(),LocalDateTime.now(),true,"SYSTEM","SYSTEM"))
+                ,
                 "COMPLETED"
         );
     }

@@ -12,7 +12,6 @@ import java.util.List;
 
 @Document(collection = "bills")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Bill {
     @Id
@@ -26,5 +25,6 @@ public class Bill {
     private String appliedDiscountCode;
     private String discountDescription;
     private LocalDateTime billDate;
+    private List<Discount> discount;
     private String status;
 }
