@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class BillDTO {
+    private String id;
     private String customerId;
     private List<BillItem> items;
     private BigDecimal totalAmount;

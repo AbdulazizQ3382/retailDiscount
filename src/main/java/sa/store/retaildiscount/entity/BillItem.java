@@ -12,8 +12,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class BillItem {
 
-    @Id
-    private String id;
     private String productName;
     private BigDecimal unitPrice;
     private Integer quantity;

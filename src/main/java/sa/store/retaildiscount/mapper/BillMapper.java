@@ -30,7 +30,7 @@ public interface BillMapper {
                 .customerId(billRequest.getCustomerId())
                 .items(billRequest.getItems())
                 .totalAmount(totalAmount)
-                .netPayableAmount(netPayableAmount[0] != null ? netPayableAmount[0] : totalAmount)
+                .netPayableAmount(netPayableAmount.length > 0 ? netPayableAmount[0] : totalAmount)
                 .billDate(java.time.LocalDateTime.now())
                 .discount(List.of(
                         DiscountDTO.builder()

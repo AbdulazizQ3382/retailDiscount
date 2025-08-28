@@ -33,7 +33,6 @@ public class MongoInitializer implements CommandLineRunner {
         log.info("Starting MongoDB collections and documents initialization...");
         
         initializeCustomers();
-//        initializeDiscounts();
         initializeBills();
         
         log.info("MongoDB initialization completed!");
@@ -58,58 +57,39 @@ public class MongoInitializer implements CommandLineRunner {
         }
     }
 
-    private void initializeDiscounts() {
-        if (mongoTemplate.count(new Query(), Discount.class) == 0) {
-            log.info("Creating discounts collection and inserting sample documents...");
-
-            List<Discount> discounts = Arrays.asList(
-                new Discount(null, new BigDecimal("10"), "DISCOUNT_PR"),
-                new Discount(null, new BigDecimal("20"), "PERCENTAGE"),
-                new Discount(null, new BigDecimal("15"), "PERCENTAGE"),
-                new Discount(null, new BigDecimal("50"), "FIXED"),
-                new Discount(null, new BigDecimal("25"), "PERCENTAGE"),
-                new Discount(null, new BigDecimal("10"), "PERCENTAGE")
-            );
-
-            mongoTemplate.insertAll(discounts);
-            log.info("Inserted {} discount documents", discounts.size());
-        } else {
-            log.info("Discounts collection already exists with data");
-        }
-    }
 
     private void initializeBills() {
         if (mongoTemplate.count(new Query(), Bill.class) == 0) {
             log.info("Creating bills collection and inserting sample documents...");
             
             // Create sample discounts for nested data
-            Discount electronicsDiscount = new Discount(null, new BigDecimal("10"), "CUSTOMER_TYPE_DISCOUNT");
-            Discount clothingDiscount = new Discount(null, new BigDecimal("20"), "CUSTOMER_TYPE_DISCOUNT");
-            Discount fixedDiscount = new Discount(null, new BigDecimal("50"), "PRICE_DISCOUNT");
+            Discount electronicsDiscount = new Discount(new BigDecimal("10"), "CUSTOMER_TYPE_DISCOUNT");
+            Discount clothingDiscount = new Discount(new BigDecimal("20"), "CUSTOMER_TYPE_DISCOUNT");
+            Discount fixedDiscount = new Discount(new BigDecimal("50"), "PRICE_DISCOUNT");
 
             List<Bill> bills = Arrays.asList(
                 new Bill(null, "customer1", Arrays.asList(
-                    new BillItem(null, "Gaming Laptop", new BigDecimal("2500.00"), 1),
-                    new BillItem(null, "Wireless Mouse", new BigDecimal("150.00"), 2)
+                    new BillItem( "Gaming Laptop", new BigDecimal("2500.00"), 1),
+                    new BillItem("Wireless Mouse", new BigDecimal("150.00"), 2)
                 ), new BigDecimal("2800.00"), new BigDecimal("2520.00"), LocalDateTime.now().minusDays(3), 
                 Arrays.asList(electronicsDiscount)),
                 
                 new Bill(null, "customer2", Arrays.asList(
-                    new BillItem(null, "Designer Shirt", new BigDecimal("299.99"), 2),
-                    new BillItem(null, "Premium Jeans", new BigDecimal("199.99"), 1)
+                    new BillItem("Designer Shirt", new BigDecimal("299.99"), 2),
+                    new BillItem("Premium Jeans", new BigDecimal("199.99"), 1)
                 ), new BigDecimal("799.97"), new BigDecimal("639.98"), LocalDateTime.now().minusDays(2), 
                 Arrays.asList(clothingDiscount)),
                 
                 new Bill(null, "customer3", Arrays.asList(
-                    new BillItem(null, "Coffee Maker", new BigDecimal("450.00"), 1),
-                    new BillItem(null, "Coffee Beans", new BigDecimal("75.00"), 3)
+                    new BillItem("Coffee Maker", new BigDecimal("450.00"), 1),
+                    new BillItem("Coffee Beans", new BigDecimal("75.00"), 3)
                 ), new BigDecimal("675.00"), new BigDecimal("625.00"), LocalDateTime.now().minusDays(1), 
                 Arrays.asList(fixedDiscount)),
                 
                 new Bill(null, "customer4", Arrays.asList(
-                    new BillItem(null, "Smart TV", new BigDecimal("1200.00"), 1),
-                    new BillItem(null, "Sound Bar", new BigDecimal("300.00"), 1),
-                    new BillItem(null, "Casual Wear Set", new BigDecimal("180.00"), 2)
+                    new BillItem("Smart TV", new BigDecimal("1200.00"), 1),
+                    new BillItem("Sound Bar", new BigDecimal("300.00"), 1),
+                    new BillItem("Casual Wear Set", new BigDecimal("180.00"), 2)
                 ), new BigDecimal("1860.00"), new BigDecimal("1674.00"), LocalDateTime.now(), 
                 Arrays.asList(electronicsDiscount, clothingDiscount))
             );

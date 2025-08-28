@@ -43,7 +43,9 @@ public class DiscountService {
         Bill savedBill = mongoTemplate.save(BillMapper.INSTANCE.billDTOToBill(billDTO));
 
         log.info("Bill saved with ID: {}", savedBill.getId());
-        
+
+        billDTO.setId(savedBill.getId());
+
         return billDTO;
     }
 
@@ -73,7 +75,12 @@ public class DiscountService {
         BigDecimal customerTypeDiscount = applyCustomerTypeDiscount(customer.getCustomerType(),customer.getRegistrationDate(), originalAmount);
 
         if(originalAmount.compareTo(new BigDecimal(100)) <= 0) {
-            return BillMapper.INSTANCE.buildBuildBillDTO(billRequest,discountAmount,BigDecimal.ZERO, originalAmount);
+
+            discountAmount = BigDecimal.ZERO;
+
+            BigDecimal netAmount = originalAmount.subtract(customerTypeDiscount);
+
+            return BillMapper.INSTANCE.buildBuildBillDTO(billRequest,customerTypeDiscount,discountAmount,originalAmount,netAmount);
         }
 
         BigDecimal netAmount = originalAmount.subtract(discountAmount.add(customerTypeDiscount));

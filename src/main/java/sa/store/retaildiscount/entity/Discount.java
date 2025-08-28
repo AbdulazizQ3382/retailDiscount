@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class Discount {
-    @Id
-    private String id;
+
     private BigDecimal discountAmount;
     private String discountType;
 }
