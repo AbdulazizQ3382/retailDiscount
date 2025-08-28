@@ -24,13 +24,8 @@ public class DiscountController {
     public ResponseEntity<BillDTO> calculateDiscount(@RequestBody BillRequest billRequest) {
 
         log.info("Received discount calculation request for customer: {}", billRequest.getCustomerId());
-        try {
             BillDTO response = discountService.processBill(billRequest);
             return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error processing bill: ", e);
-            return ResponseEntity.internalServerError().build();
-        }
     }
 
     @GetMapping("/health")

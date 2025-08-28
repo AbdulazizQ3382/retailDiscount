@@ -66,6 +66,10 @@ public class DiscountService {
 
         Customer customer = this.customerService.getCustomerById(billRequest.getCustomerId());
 
+        if(customer == null) {
+            throw new RuntimeException("Customer not found with ID: " + billRequest.getCustomerId());
+        }
+
         BigDecimal customerTypeDiscount = applyCustomerTypeDiscount(customer.getCustomerType(),customer.getRegistrationDate(), originalAmount);
 
         if(originalAmount.compareTo(new BigDecimal(100)) <= 0) {

@@ -14,6 +14,25 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
+                .requestMatchers(
+                    "/actuator/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/v3/api-docs/**",
+                    "/webjars/**",
+                    "/swagger-resources/**",
+                    "/h2-console/**",
+                    "/error",
+                    "/health",
+                    "/info",
+                    "/metrics",
+                    "/prometheus",
+                    "/favicon.ico",
+                    "/static/**",
+                    "/public/**",
+                    "/resources/**",
+                    "/**"
+                ).permitAll()
                 .anyRequest().permitAll()
             )
             .csrf(csrf -> csrf.disable());
