@@ -1,24 +1,23 @@
-package sa.store.retaildiscount.entity;
+package sa.store.retaildiscount.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Document(collection = "bills")
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class Bill {
-    @Id
-    private String id;
+@Builder
+public class BillDTO {
     private String customerId;
     private List<BillItem> items;
     private BigDecimal totalAmount;
     private BigDecimal netPayableAmount;
     private LocalDateTime billDate;
-    private List<Discount> discount;
+    private List<DiscountDTO> discount;
 }

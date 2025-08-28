@@ -10,10 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BillItem {
-    private String productId;
     private String productName;
-    private String category;
     private BigDecimal unitPrice;
     private Integer quantity;
-    private BigDecimal itemTotal;
 }

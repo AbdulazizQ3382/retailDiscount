@@ -22,5 +22,4 @@ public class Customer {
     private String phone;
     private String customerType;
     private LocalDateTime registrationDate;
-    private Boolean active;
 }

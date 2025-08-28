@@ -9,8 +9,5 @@ import java.util.List;
 @Getter
 public class BillRequest {
     private String customerId;
-    private String customerType;
     private List<BillItem> items;
-    private BigDecimal totalAmount;
-    private String discountCode;
 }

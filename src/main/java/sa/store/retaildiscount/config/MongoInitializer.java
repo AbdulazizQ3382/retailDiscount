@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import sa.store.retaildiscount.entity.Bill;
-import sa.store.retaildiscount.entity.BillItemEntity;
+import sa.store.retaildiscount.entity.BillItem;
 import sa.store.retaildiscount.entity.Customer;
 import sa.store.retaildiscount.entity.Discount;
 
@@ -33,7 +33,7 @@ public class MongoInitializer implements CommandLineRunner {
         log.info("Starting MongoDB collections and documents initialization...");
         
         initializeCustomers();
-        initializeDiscounts();
+//        initializeDiscounts();
         initializeBills();
         
         log.info("MongoDB initialization completed!");
@@ -44,11 +44,11 @@ public class MongoInitializer implements CommandLineRunner {
             log.info("Creating customers collection and inserting sample documents...");
             
             List<Customer> customers = Arrays.asList(
-                new Customer(null, "Ahmed", "Al-Mahmoud", "ahmed.mahmoud@email.com", "+966501234567", "PREMIUM", LocalDateTime.now().minusDays(30), true),
-                new Customer(null, "Fatima", "Al-Zahra", "fatima.zahra@email.com", "+966501234568", "VIP", LocalDateTime.now().minusDays(15), true),
-                new Customer(null, "Mohammed", "Al-Rashid", "mohammed.rashid@email.com", "+966501234569", "REGULAR", LocalDateTime.now().minusDays(20), true),
-                new Customer(null, "Aisha", "Al-Nouri", "aisha.nouri@email.com", "+966501234570", "PREMIUM", LocalDateTime.now().minusDays(10), true),
-                new Customer(null, "Omar", "Al-Farisi", "omar.farisi@email.com", "+966501234571", "REGULAR", LocalDateTime.now().minusDays(5), true)
+                new Customer(null, "Ahmed", "Al-Mahmoud", "ahmed.mahmoud@email.com", "+966501234567", "EMPLOYEE", LocalDateTime.now().minusDays(30)),
+                new Customer(null, "Fatima", "Al-Zahra", "fatima.zahra@email.com", "+966501234568", "EMPLOYEE", LocalDateTime.now().minusDays(15)),
+                new Customer(null, "Mohammed", "Al-Rashid", "mohammed.rashid@email.com", "+966501234569", "AFFILIATE", LocalDateTime.now().minusDays(20)),
+                new Customer(null, "Aisha", "Al-Nouri", "aisha.nouri@email.com", "+966501234570", "AFFILIATE", LocalDateTime.now().minusDays(10)),
+                new Customer(null, "Omar", "Al-Farisi", "omar.farisi@email.com", "+966501234571", "REGULAR", LocalDateTime.now().minusDays(5))
             );
             
             mongoTemplate.insertAll(customers);
@@ -61,22 +61,16 @@ public class MongoInitializer implements CommandLineRunner {
     private void initializeDiscounts() {
         if (mongoTemplate.count(new Query(), Discount.class) == 0) {
             log.info("Creating discounts collection and inserting sample documents...");
-            
+
             List<Discount> discounts = Arrays.asList(
-                new Discount(null, "ELECTRONICS10", "10% discount on all electronics", new BigDecimal("10"), null,
-                    LocalDateTime.now(), LocalDateTime.now().plusDays(30), true, "Electronics", "PERCENTAGE"),
-                new Discount(null, "CLOTHING20", "20% discount on clothing items", new BigDecimal("20"), null,
-                    LocalDateTime.now(), LocalDateTime.now().plusDays(15), true, "Clothing", "PERCENTAGE"),
-                new Discount(null, "APPLIANCES15", "15% discount on home appliances", new BigDecimal("15"), null,
-                    LocalDateTime.now(), LocalDateTime.now().plusDays(45), true, "Appliances", "PERCENTAGE"),
-                new Discount(null, "NEWUSER50", "50 SAR off for new customers", null, new BigDecimal("50"),
-                    LocalDateTime.now(), LocalDateTime.now().plusDays(60), true, null, "FIXED"),
-                new Discount(null, "SUMMER25", "25% summer sale discount", new BigDecimal("25"), null,
-                    LocalDateTime.now(), LocalDateTime.now().plusDays(90), true, null, "PERCENTAGE"),
-                new Discount(null, "BOOKS10", "10% discount on books", new BigDecimal("10"), null,
-                    LocalDateTime.now(), LocalDateTime.now().plusDays(20), true, "Books", "PERCENTAGE")
+                new Discount(null, new BigDecimal("10"), "DISCOUNT_PR"),
+                new Discount(null, new BigDecimal("20"), "PERCENTAGE"),
+                new Discount(null, new BigDecimal("15"), "PERCENTAGE"),
+                new Discount(null, new BigDecimal("50"), "FIXED"),
+                new Discount(null, new BigDecimal("25"), "PERCENTAGE"),
+                new Discount(null, new BigDecimal("10"), "PERCENTAGE")
             );
-            
+
             mongoTemplate.insertAll(discounts);
             log.info("Inserted {} discount documents", discounts.size());
         } else {
@@ -89,48 +83,35 @@ public class MongoInitializer implements CommandLineRunner {
             log.info("Creating bills collection and inserting sample documents...");
             
             // Create sample discounts for nested data
-            Discount electronicsDiscount = new Discount(null, "ELECTRONICS10", "10% discount on all electronics", 
-                new BigDecimal("10"), null, LocalDateTime.now(), LocalDateTime.now().plusDays(30), true, "Electronics", "PERCENTAGE");
-            
-            Discount clothingDiscount = new Discount(null, "CLOTHING20", "20% discount on clothing items", 
-                new BigDecimal("20"), null, LocalDateTime.now(), LocalDateTime.now().plusDays(15), true, "Clothing", "PERCENTAGE");
-            
-            Discount fixedDiscount = new Discount(null, "NEWUSER50", "50 SAR off for new customers", 
-                null, new BigDecimal("50"), LocalDateTime.now(), LocalDateTime.now().plusDays(60), true, null, "FIXED");
+            Discount electronicsDiscount = new Discount(null, new BigDecimal("10"), "CUSTOMER_TYPE_DISCOUNT");
+            Discount clothingDiscount = new Discount(null, new BigDecimal("20"), "CUSTOMER_TYPE_DISCOUNT");
+            Discount fixedDiscount = new Discount(null, new BigDecimal("50"), "PRICE_DISCOUNT");
 
             List<Bill> bills = Arrays.asList(
-                // Bill 1 - Electronics purchase with discount
-                new Bill(null, "1", "PREMIUM", Arrays.asList(
-                    new BillItemEntity("prod1", "Gaming Laptop", "Electronics", new BigDecimal("2500.00"), 1, new BigDecimal("2500.00")),
-                    new BillItemEntity("prod2", "Wireless Mouse", "Electronics", new BigDecimal("150.00"), 2, new BigDecimal("300.00"))
-                ), new BigDecimal("2800.00"), new BigDecimal("280.00"), new BigDecimal("2520.00"), "ELECTRONICS10", 
-                "10% discount on all electronics", LocalDateTime.now().minusDays(3), 
-                Arrays.asList(electronicsDiscount), "COMPLETED"),
+                new Bill(null, "customer1", Arrays.asList(
+                    new BillItem(null, "Gaming Laptop", new BigDecimal("2500.00"), 1),
+                    new BillItem(null, "Wireless Mouse", new BigDecimal("150.00"), 2)
+                ), new BigDecimal("2800.00"), new BigDecimal("2520.00"), LocalDateTime.now().minusDays(3), 
+                Arrays.asList(electronicsDiscount)),
                 
-                // Bill 2 - Clothing purchase with multiple discounts  
-                new Bill(null, "2", "VIP", Arrays.asList(
-                    new BillItemEntity("prod3", "Designer Shirt", "Clothing", new BigDecimal("299.99"), 2, new BigDecimal("599.98")),
-                    new BillItemEntity("prod4", "Premium Jeans", "Clothing", new BigDecimal("199.99"), 1, new BigDecimal("199.99"))
-                ), new BigDecimal("799.97"), new BigDecimal("159.99"), new BigDecimal("639.98"), "CLOTHING20", 
-                "20% discount on clothing items", LocalDateTime.now().minusDays(2), 
-                Arrays.asList(clothingDiscount), "COMPLETED"),
+                new Bill(null, "customer2", Arrays.asList(
+                    new BillItem(null, "Designer Shirt", new BigDecimal("299.99"), 2),
+                    new BillItem(null, "Premium Jeans", new BigDecimal("199.99"), 1)
+                ), new BigDecimal("799.97"), new BigDecimal("639.98"), LocalDateTime.now().minusDays(2), 
+                Arrays.asList(clothingDiscount)),
                 
-                // Bill 3 - Mixed items with fixed discount
-                new Bill(null, "3", "REGULAR", Arrays.asList(
-                    new BillItemEntity("prod5", "Coffee Maker", "Appliances", new BigDecimal("450.00"), 1, new BigDecimal("450.00")),
-                    new BillItemEntity("prod6", "Coffee Beans", "Food", new BigDecimal("75.00"), 3, new BigDecimal("225.00"))
-                ), new BigDecimal("675.00"), new BigDecimal("50.00"), new BigDecimal("625.00"), "NEWUSER50", 
-                "50 SAR off for new customers", LocalDateTime.now().minusDays(1), 
-                Arrays.asList(fixedDiscount), "COMPLETED"),
+                new Bill(null, "customer3", Arrays.asList(
+                    new BillItem(null, "Coffee Maker", new BigDecimal("450.00"), 1),
+                    new BillItem(null, "Coffee Beans", new BigDecimal("75.00"), 3)
+                ), new BigDecimal("675.00"), new BigDecimal("625.00"), LocalDateTime.now().minusDays(1), 
+                Arrays.asList(fixedDiscount)),
                 
-                // Bill 4 - Large order with multiple discount types
-                new Bill(null, "4", "VIP", Arrays.asList(
-                    new BillItemEntity("prod7", "Smart TV", "Electronics", new BigDecimal("1200.00"), 1, new BigDecimal("1200.00")),
-                    new BillItemEntity("prod8", "Sound Bar", "Electronics", new BigDecimal("300.00"), 1, new BigDecimal("300.00")),
-                    new BillItemEntity("prod9", "Casual Wear Set", "Clothing", new BigDecimal("180.00"), 2, new BigDecimal("360.00"))
-                ), new BigDecimal("1860.00"), new BigDecimal("186.00"), new BigDecimal("1674.00"), "ELECTRONICS10", 
-                "Multiple discounts applied", LocalDateTime.now(), 
-                Arrays.asList(electronicsDiscount, clothingDiscount), "COMPLETED")
+                new Bill(null, "customer4", Arrays.asList(
+                    new BillItem(null, "Smart TV", new BigDecimal("1200.00"), 1),
+                    new BillItem(null, "Sound Bar", new BigDecimal("300.00"), 1),
+                    new BillItem(null, "Casual Wear Set", new BigDecimal("180.00"), 2)
+                ), new BigDecimal("1860.00"), new BigDecimal("1674.00"), LocalDateTime.now(), 
+                Arrays.asList(electronicsDiscount, clothingDiscount))
             );
             
             mongoTemplate.insertAll(bills);
