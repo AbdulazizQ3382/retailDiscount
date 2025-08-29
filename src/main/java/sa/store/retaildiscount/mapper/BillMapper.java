@@ -1,7 +1,6 @@
 package sa.store.retaildiscount.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import sa.store.retaildiscount.dto.BillDTO;
 import sa.store.retaildiscount.dto.BillRequest;
@@ -25,7 +24,7 @@ public interface BillMapper {
 
     DiscountDTO discountEntityToDiscountDTO(Discount discount);
 
-    default BillDTO buildBuildBillDTO(BillRequest billRequest, BigDecimal customerTypeDiscount,BigDecimal priceDiscount, BigDecimal totalAmount , BigDecimal... netPayableAmount) {
+    default BillDTO buildBillDTO(BillRequest billRequest, BigDecimal customerTypeDiscount, BigDecimal priceDiscount, BigDecimal totalAmount , BigDecimal... netPayableAmount) {
         return BillDTO.builder()
                 .customer(billRequest.getCustomer())
                 .items(billRequest.getItems())

@@ -13,19 +13,19 @@ import sa.store.retaildiscount.service.DiscountService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/discount")
-public class DiscountController {
+@RequestMapping("/api/bills")
+public class BillController {
 
     private final DiscountService discountService;
     private final BillService billService;
 
     @Autowired
-    public DiscountController(DiscountService discountService, BillService billService) {
+    public BillController(DiscountService discountService, BillService billService) {
         this.discountService = discountService;
         this.billService = billService;
     }
 
-    private final Logger log = org.slf4j.LoggerFactory.getLogger(DiscountController.class);
+    private final Logger log = org.slf4j.LoggerFactory.getLogger(BillController.class);
 
     @PostMapping("")
     public ResponseEntity<BillDTO> calculateDiscount(@RequestBody BillRequest billRequest) {
@@ -46,14 +46,14 @@ public class DiscountController {
             return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/bill/{billId}")
+    @GetMapping("{billId}")
     public ResponseEntity<BillDTO> getBillById(@PathVariable String billId) {
         log.info("Received request to get bill with ID: {}", billId);
         BillDTO bill = billService.getBillById(billId);
         return ResponseEntity.ok(bill);
     }
 
-    @GetMapping("/bills/customer/{customerId}")
+    @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<BillDTO>> getBillsByCustomerId(@PathVariable String customerId) {
         // todo: pageable default
         log.info("Received request to get bills for customer ID: {}", customerId);

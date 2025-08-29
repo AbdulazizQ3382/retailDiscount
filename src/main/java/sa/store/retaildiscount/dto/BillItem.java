@@ -12,5 +12,5 @@ import java.math.BigDecimal;
 public class BillItem {
     private String productName;
     private BigDecimal unitPrice;
-    private Integer quantity;
+    private Double quantity;
 }
