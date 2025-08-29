@@ -47,7 +47,7 @@ class BillControllerTest {
     private BillRequest billRequest;
     private BillDTO billDTO;
     private CustomerDTO customerDTO;
-    private List<BillItem> billItems;
+    private List<BillItemDTO> billItemDTOS;
 
 
 
@@ -64,13 +64,13 @@ class BillControllerTest {
                 .registrationDate(LocalDateTime.now().minusDays(30).toString())
                 .build();
 
-        billItems = Arrays.asList(
-                new BillItem("Gaming Laptop", new BigDecimal("1000.00"), 1.0),
-                new BillItem("Wireless Mouse", new BigDecimal("50.00"), 2.0)
+        billItemDTOS = Arrays.asList(
+                new BillItemDTO("Gaming Laptop", new BigDecimal("1000.00"), 1.0),
+                new BillItemDTO("Wireless Mouse", new BigDecimal("50.00"), 2.0)
         );
 
         billRequest = new BillRequest();
-        billRequest.setItems(billItems);
+        billRequest.setItems(billItemDTOS);
         billRequest.setCustomer(customerDTO);
 
         List<DiscountDTO> discounts = Arrays.asList(
@@ -87,7 +87,7 @@ class BillControllerTest {
         billDTO = BillDTO.builder()
                 .id("bill123")
                 .customer(customerDTO)
-                .items(billItems)
+                .items(billItemDTOS)
                 .totalAmount(new BigDecimal("1100.00"))
                 .netPayableAmount(new BigDecimal("715.00"))
                 .billDate(LocalDateTime.now())
@@ -163,7 +163,7 @@ class BillControllerTest {
     @DisplayName("POST /api/bills - Should return 400 when item has negative quantity")
     void shouldReturn400WhenItemHasNegativeQuantity() throws Exception {
         // Given
-        billItems.get(0).setQuantity(-1.0);
+        billItemDTOS.get(0).setQuantity(-1.0);
 
         // When & Then
         mockMvc.perform(post("/api/bills")
@@ -178,7 +178,7 @@ class BillControllerTest {
     @DisplayName("POST /api/bills - Should return 400 when item has zero quantity")
     void shouldReturn400WhenItemHasZeroQuantity() throws Exception {
         // Given
-        billItems.get(0).setQuantity(0.0);
+        billItemDTOS.get(0).setQuantity(0.0);
 
         // When & Then
         mockMvc.perform(post("/api/bills")
@@ -193,7 +193,7 @@ class BillControllerTest {
     @DisplayName("POST /api/bills - Should return 400 when item has null unit price")
     void shouldReturn400WhenItemHasNullUnitPrice() throws Exception {
         // Given
-        billItems.get(0).setUnitPrice(null);
+        billItemDTOS.get(0).setUnitPrice(null);
 
         // When & Then
         mockMvc.perform(post("/api/bills")
@@ -208,7 +208,7 @@ class BillControllerTest {
     @DisplayName("POST /api/bills - Should return 400 when item has negative unit price")
     void shouldReturn400WhenItemHasNegativeUnitPrice() throws Exception {
         // Given
-        billItems.get(0).setUnitPrice(new BigDecimal("-10.00"));
+        billItemDTOS.get(0).setUnitPrice(new BigDecimal("-10.00"));
 
         // When & Then
         mockMvc.perform(post("/api/bills")
@@ -360,7 +360,7 @@ class BillControllerTest {
         BillDTO billDTO2 = BillDTO.builder()
                 .id("bill456")
                 .customer(customerDTO)
-                .items(billItems)
+                .items(billItemDTOS)
                 .totalAmount(new BigDecimal("500.00"))
                 .netPayableAmount(new BigDecimal("350.00"))
                 .billDate(LocalDateTime.now().minusDays(1))

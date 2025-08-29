@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import sa.store.retaildiscount.dto.BillDTO;
-import sa.store.retaildiscount.dto.BillItem;
+import sa.store.retaildiscount.dto.BillItemDTO;
 import sa.store.retaildiscount.dto.BillRequest;
 import sa.store.retaildiscount.dto.CustomerDTO;
 import sa.store.retaildiscount.entity.Bill;
@@ -34,14 +34,14 @@ class DiscountServiceTest {
     private DiscountService discountService;
 
     private BillRequest billRequest;
-    private List<BillItem> items;
+    private List<BillItemDTO> items;
     private CustomerDTO customer;
 
     @BeforeEach
     void setUp() {
         items = Arrays.asList(
-            new BillItem("Gaming Laptop", new BigDecimal("1000.00"), 1.0),
-            new BillItem("Wireless Mouse", new BigDecimal("50.00"), 2.0)
+            new BillItemDTO("Gaming Laptop", new BigDecimal("1000.00"), 1.0),
+            new BillItemDTO("Wireless Mouse", new BigDecimal("50.00"), 2.0)
         );
         
         customer = CustomerDTO.builder()
@@ -160,8 +160,8 @@ class DiscountServiceTest {
     void shouldProcessBillUnder100WithNoBulkDiscount() {
         // Given
         items = Arrays.asList(
-            new BillItem("Small Item", new BigDecimal("30.00"), 1.0),
-            new BillItem("Another Item", new BigDecimal("40.00"), 1.0)
+            new BillItemDTO("Small Item", new BigDecimal("30.00"), 1.0),
+            new BillItemDTO("Another Item", new BigDecimal("40.00"), 1.0)
         );
         billRequest.setItems(items);
         

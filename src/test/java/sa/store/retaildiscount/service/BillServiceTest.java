@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import sa.store.retaildiscount.dto.BillDTO;
-import sa.store.retaildiscount.dto.BillItem;
+import sa.store.retaildiscount.dto.BillItemDTO;
 import sa.store.retaildiscount.dto.CustomerDTO;
 import sa.store.retaildiscount.entity.Bill;
 import sa.store.retaildiscount.entity.Customer;
@@ -46,7 +46,7 @@ class BillServiceTest {
     private Customer customer;
     private CustomerDTO customerDTO;
     private List<sa.store.retaildiscount.entity.BillItem> entityBillItems;
-    private List<BillItem> dtoBillItems;
+    private List<BillItemDTO> dtoBillItemDTOS;
 
     @BeforeEach
     void setUp() {
@@ -72,9 +72,9 @@ class BillServiceTest {
         );
 
         // Setup DTO BillItems
-        dtoBillItems = Arrays.asList(
-                new BillItem("Gaming Laptop", new BigDecimal("1000.00"), 1.0),
-                new BillItem("Wireless Mouse", new BigDecimal("50.00"), 2.0)
+        dtoBillItemDTOS = Arrays.asList(
+                new BillItemDTO("Gaming Laptop", new BigDecimal("1000.00"), 1.0),
+                new BillItemDTO("Wireless Mouse", new BigDecimal("50.00"), 2.0)
         );
 
         // Setup Bill entity
@@ -90,7 +90,7 @@ class BillServiceTest {
         billDTO = BillDTO.builder()
                 .id("bill123")
                 .customer(customerDTO)
-                .items(dtoBillItems)
+                .items(dtoBillItemDTOS)
                 .totalAmount(new BigDecimal("1100.00"))
                 .netPayableAmount(new BigDecimal("770.00"))
                 .billDate(LocalDateTime.now())
@@ -181,7 +181,7 @@ class BillServiceTest {
         BillDTO billDTO2 = BillDTO.builder()
                 .id("bill456")
                 .customer(customerDTO)
-                .items(dtoBillItems)
+                .items(dtoBillItemDTOS)
                 .totalAmount(new BigDecimal("500.00"))
                 .netPayableAmount(new BigDecimal("350.00"))
                 .billDate(LocalDateTime.now().minusDays(1))

@@ -16,7 +16,7 @@ import java.util.List;
 public class BillDTO {
     private String id;
     private CustomerDTO customer;
-    private List<BillItem> items;
+    private List<BillItemDTO> items;
     private BigDecimal totalAmount;
     private BigDecimal netPayableAmount;
     private LocalDateTime billDate;
