@@ -67,8 +67,8 @@ class BillServiceTest {
 
         // Setup entity BillItems
         entityBillItems = Arrays.asList(
-                new sa.store.retaildiscount.entity.BillItem("Gaming Laptop", new BigDecimal("1000.00"), 1),
-                new sa.store.retaildiscount.entity.BillItem("Wireless Mouse", new BigDecimal("50.00"), 2)
+                new sa.store.retaildiscount.entity.BillItem("Gaming Laptop", new BigDecimal("1000.00"), 1.0),
+                new sa.store.retaildiscount.entity.BillItem("Wireless Mouse", new BigDecimal("50.00"), 2.0)
         );
 
         // Setup DTO BillItems

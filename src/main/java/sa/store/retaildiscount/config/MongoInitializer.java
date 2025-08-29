@@ -73,27 +73,27 @@ public class MongoInitializer implements CommandLineRunner {
 
             List<Bill> bills = Arrays.asList(
                 new Bill(null, customer1, Arrays.asList(
-                    new BillItem("Gaming Laptop", new BigDecimal("2500.00"), 1),
-                    new BillItem("Wireless Mouse", new BigDecimal("150.00"), 2)
+                    new BillItem("Gaming Laptop", new BigDecimal("2500.00"), 1.0),
+                    new BillItem("Wireless Mouse", new BigDecimal("150.00"), 2.0)
                 ), new BigDecimal("2800.00"), new BigDecimal("2520.00"), LocalDateTime.now().minusDays(3), 
                 Arrays.asList(electronicsDiscount)),
                 
                 new Bill(null, customer2, Arrays.asList(
-                    new BillItem("Designer Shirt", new BigDecimal("299.99"), 2),
-                    new BillItem("Premium Jeans", new BigDecimal("199.99"), 1)
+                    new BillItem("Designer Shirt", new BigDecimal("299.99"), 2.0),
+                    new BillItem("Premium Jeans", new BigDecimal("199.99"), 1.0)
                 ), new BigDecimal("799.97"), new BigDecimal("639.98"), LocalDateTime.now().minusDays(2), 
                 Arrays.asList(clothingDiscount)),
                 
                 new Bill(null, customer3, Arrays.asList(
-                    new BillItem("Coffee Maker", new BigDecimal("450.00"), 1),
-                    new BillItem("Coffee Beans", new BigDecimal("75.00"), 3)
+                    new BillItem("Coffee Maker", new BigDecimal("450.00"), 1.0),
+                    new BillItem("Coffee Beans", new BigDecimal("75.00"), 3.0)
                 ), new BigDecimal("675.00"), new BigDecimal("625.00"), LocalDateTime.now().minusDays(1), 
                 Arrays.asList(fixedDiscount)),
                 
                 new Bill(null, customer4, Arrays.asList(
-                    new BillItem("Smart TV", new BigDecimal("1200.00"), 1),
-                    new BillItem("Sound Bar", new BigDecimal("300.00"), 1),
-                    new BillItem("Casual Wear Set", new BigDecimal("180.00"), 2)
+                    new BillItem("Smart TV", new BigDecimal("1200.00"), 1.0),
+                    new BillItem("Sound Bar", new BigDecimal("300.00"), 1.0),
+                    new BillItem("Casual Wear Set", new BigDecimal("180.00"), 2.0)
                 ), new BigDecimal("1860.00"), new BigDecimal("1674.00"), LocalDateTime.now(), 
                 Arrays.asList(electronicsDiscount, clothingDiscount))
             );
