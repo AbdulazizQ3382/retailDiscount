@@ -8,6 +8,6 @@ import java.util.List;
 @Setter
 @Getter
 public class BillRequest {
-    private String customerId;
     private List<BillItem> items;
+    private  CustomerDTO customer;
 }

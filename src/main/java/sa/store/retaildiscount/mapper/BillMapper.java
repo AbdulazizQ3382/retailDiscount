@@ -27,7 +27,7 @@ public interface BillMapper {
 
     default BillDTO buildBuildBillDTO(BillRequest billRequest, BigDecimal customerTypeDiscount,BigDecimal priceDiscount, BigDecimal totalAmount , BigDecimal... netPayableAmount) {
         return BillDTO.builder()
-                .customerId(billRequest.getCustomerId())
+                .customer(billRequest.getCustomer())
                 .items(billRequest.getItems())
                 .totalAmount(totalAmount)
                 .netPayableAmount(netPayableAmount.length > 0 ? netPayableAmount[0] : totalAmount)

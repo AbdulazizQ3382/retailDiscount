@@ -36,7 +36,7 @@ public class LoggingAspect {
         
         try {
             Object result = joinPoint.proceed();
-            
+
             long executionTime = System.currentTimeMillis() - startTime;
             log.info("<== Exiting method: {}.{}() with result: {} | Execution time: {} ms", 
                     className, methodName, result, executionTime);

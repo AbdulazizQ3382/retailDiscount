@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import sa.store.retaildiscount.dto.BillDTO;
 import sa.store.retaildiscount.dto.BillRequest;
 import sa.store.retaildiscount.dto.DiscountDTO;
@@ -35,8 +37,7 @@ public class DiscountService {
         this.customerService = customerService;
     }
     public BillDTO processBill(BillRequest billRequest) {
-        log.info("Processing bill for customer: {}", billRequest.getCustomerId());
-        
+
         // Calculate discount
         BillDTO billDTO = this.calculateDiscount(billRequest);
 
@@ -66,13 +67,8 @@ public class DiscountService {
 
         BigDecimal discountAmount = originalAmount.divide(new BigDecimal("100"),2,RoundingMode.DOWN).multiply(new BigDecimal(5));
 
-        Customer customer = this.customerService.getCustomerById(billRequest.getCustomerId());
 
-        if(customer == null) {
-            throw new RuntimeException("Customer not found with ID: " + billRequest.getCustomerId());
-        }
-
-        BigDecimal customerTypeDiscount = applyCustomerTypeDiscount(customer.getCustomerType(),customer.getRegistrationDate(), originalAmount);
+        BigDecimal customerTypeDiscount = applyCustomerTypeDiscount(billRequest.getCustomer().getCustomerType(),LocalDateTime.parse(billRequest.getCustomer().getRegistrationDate()), originalAmount);
 
         if(originalAmount.compareTo(new BigDecimal(100)) <= 0) {
 
@@ -100,7 +96,7 @@ public class DiscountService {
         };
 
         if (discount.compareTo(BigDecimal.ZERO) == 0) {
-            // Check for loyalty discount (registered more than 2 years)
+
             if (registrationDate != null && registrationDate.isBefore(LocalDateTime.now().minusYears(2))) {
                 discount = amount.multiply(new BigDecimal("0.05")).setScale(2, RoundingMode.HALF_UP);
             }

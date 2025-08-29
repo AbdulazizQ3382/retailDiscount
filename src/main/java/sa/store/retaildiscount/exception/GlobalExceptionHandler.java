@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -77,5 +78,19 @@ public class GlobalExceptionHandler {
         errorResponse.put("fieldErrors", fieldErrors);
         
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Map<String, Object>> handleResponseStatusException(ResponseStatusException ex, WebRequest request) {
+        log.error("Response status exception occurred: ", ex);
+        
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("status", ex.getStatusCode().value());
+        errorResponse.put("error", ex.getStatusCode().toString());
+        errorResponse.put("message", ex.getReason() != null ? ex.getReason() : ex.getMessage());
+        errorResponse.put("path", request.getDescription(false).replace("uri=", ""));
+        
+        return new ResponseEntity<>(errorResponse, ex.getStatusCode());
     }
 }

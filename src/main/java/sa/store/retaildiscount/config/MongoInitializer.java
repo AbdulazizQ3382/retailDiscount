@@ -43,11 +43,11 @@ public class MongoInitializer implements CommandLineRunner {
             log.info("Creating customers collection and inserting sample documents...");
             
             List<Customer> customers = Arrays.asList(
-                new Customer(null, "Ahmed", "Al-Mahmoud", "ahmed.mahmoud@email.com", "+966501234567", "EMPLOYEE", LocalDateTime.now().minusDays(30)),
-                new Customer(null, "Fatima", "Al-Zahra", "fatima.zahra@email.com", "+966501234568", "EMPLOYEE", LocalDateTime.now().minusDays(15)),
-                new Customer(null, "Mohammed", "Al-Rashid", "mohammed.rashid@email.com", "+966501234569", "AFFILIATE", LocalDateTime.now().minusDays(20)),
-                new Customer(null, "Aisha", "Al-Nouri", "aisha.nouri@email.com", "+966501234570", "AFFILIATE", LocalDateTime.now().minusDays(10)),
-                new Customer(null, "Omar", "Al-Farisi", "omar.farisi@email.com", "+966501234571", "REGULAR", LocalDateTime.now().minusDays(5))
+                new Customer("Ahmed Al-Mahmoud", "ID001", "EMPLOYEE", LocalDateTime.now().minusDays(30)),
+                new Customer("Fatima Al-Zahra", "ID002", "EMPLOYEE", LocalDateTime.now().minusDays(15)),
+                new Customer("Mohammed Al-Rashid", "ID003", "AFFILIATE", LocalDateTime.now().minusDays(20)),
+                new Customer("Aisha Al-Nouri", "ID004", "AFFILIATE", LocalDateTime.now().minusDays(10)),
+                new Customer("Omar Al-Farisi", "ID005", "REGULAR", LocalDateTime.now().minusDays(5))
             );
             
             mongoTemplate.insertAll(customers);
@@ -67,26 +67,31 @@ public class MongoInitializer implements CommandLineRunner {
             Discount clothingDiscount = new Discount(new BigDecimal("20"), "CUSTOMER_TYPE_DISCOUNT");
             Discount fixedDiscount = new Discount(new BigDecimal("50"), "PRICE_DISCOUNT");
 
+            Customer customer1 = new Customer("Ahmed Al-Mahmoud", "ID001", "EMPLOYEE", LocalDateTime.now().minusDays(30));
+            Customer customer2 = new Customer("Fatima Al-Zahra", "ID002", "EMPLOYEE", LocalDateTime.now().minusDays(15));
+            Customer customer3 = new Customer("Mohammed Al-Rashid", "ID003", "AFFILIATE", LocalDateTime.now().minusDays(20));
+            Customer customer4 = new Customer("Aisha Al-Nouri", "ID004", "AFFILIATE", LocalDateTime.now().minusDays(10));
+
             List<Bill> bills = Arrays.asList(
-                new Bill(null, "customer1", Arrays.asList(
-                    new BillItem( "Gaming Laptop", new BigDecimal("2500.00"), 1),
+                new Bill(null, customer1, Arrays.asList(
+                    new BillItem("Gaming Laptop", new BigDecimal("2500.00"), 1),
                     new BillItem("Wireless Mouse", new BigDecimal("150.00"), 2)
                 ), new BigDecimal("2800.00"), new BigDecimal("2520.00"), LocalDateTime.now().minusDays(3), 
                 Arrays.asList(electronicsDiscount)),
                 
-                new Bill(null, "customer2", Arrays.asList(
+                new Bill(null, customer2, Arrays.asList(
                     new BillItem("Designer Shirt", new BigDecimal("299.99"), 2),
                     new BillItem("Premium Jeans", new BigDecimal("199.99"), 1)
                 ), new BigDecimal("799.97"), new BigDecimal("639.98"), LocalDateTime.now().minusDays(2), 
                 Arrays.asList(clothingDiscount)),
                 
-                new Bill(null, "customer3", Arrays.asList(
+                new Bill(null, customer3, Arrays.asList(
                     new BillItem("Coffee Maker", new BigDecimal("450.00"), 1),
                     new BillItem("Coffee Beans", new BigDecimal("75.00"), 3)
                 ), new BigDecimal("675.00"), new BigDecimal("625.00"), LocalDateTime.now().minusDays(1), 
                 Arrays.asList(fixedDiscount)),
                 
-                new Bill(null, "customer4", Arrays.asList(
+                new Bill(null, customer4, Arrays.asList(
                     new BillItem("Smart TV", new BigDecimal("1200.00"), 1),
                     new BillItem("Sound Bar", new BigDecimal("300.00"), 1),
                     new BillItem("Casual Wear Set", new BigDecimal("180.00"), 2)
