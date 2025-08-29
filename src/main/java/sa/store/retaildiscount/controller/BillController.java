@@ -32,6 +32,13 @@ public class BillController {
 
         //todo : add wrapper response class
 
+        if(billRequest.getItems() == null || billRequest.getItems().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bill items are required");
+        }
+
+        if(billRequest.getItems().stream().anyMatch(item -> item.getQuantity() <= 0 || item.getUnitPrice() == null || item.getUnitPrice().doubleValue() < 0)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "All bill items must have positive quantity and unit price");
+        }
 
         if(billRequest.getCustomer() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer information is required");
