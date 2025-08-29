@@ -31,8 +31,7 @@ public class MongoInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("Starting MongoDB collections and documents initialization...");
-        
-        initializeCustomers();
+
         initializeBills();
         
         log.info("MongoDB initialization completed!");

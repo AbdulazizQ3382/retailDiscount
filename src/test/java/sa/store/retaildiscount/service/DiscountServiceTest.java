@@ -54,6 +54,8 @@ class DiscountServiceTest {
         billRequest = new BillRequest();
         billRequest.setItems(items);
         billRequest.setCustomer(customer);
+
+
     }
 
     @Test

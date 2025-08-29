@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BillController.class)
-@Import(SecurityConfig.class) // Import your main SecurityConfig class
+@Import(SecurityConfig.class)
 class BillControllerTest {
 
     @Autowired
