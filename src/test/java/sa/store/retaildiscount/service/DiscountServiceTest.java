@@ -59,7 +59,6 @@ class DiscountServiceTest {
     @Test
     @DisplayName("Should process bill successfully for employee customer")
     void shouldProcessBillSuccessfullyForEmployeeCustomer() {
-        // Given
         Bill savedBill = new Bill();
         savedBill.setId("generatedId123");
         when(mongoTemplate.save(any(Bill.class))).thenReturn(savedBill);

@@ -3,6 +3,8 @@ package sa.store.retaildiscount.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -122,5 +124,35 @@ public class GlobalExceptionHandler {
         errorResponse.put("path", request.getDescription(false).replace("uri=", ""));
         
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<Map<String, Object>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex, WebRequest request) {
+        log.warn("HTTP method '{}' not supported for this request. Supported methods: {}", ex.getMethod(), ex.getSupportedMethods());
+        
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("status", HttpStatus.METHOD_NOT_ALLOWED.value());
+        errorResponse.put("error", "Method Not Allowed");
+        errorResponse.put("message", "HTTP method '" + ex.getMethod() + "' not supported for this request");
+        errorResponse.put("path", request.getDescription(false).replace("uri=", ""));
+        errorResponse.put("supportedMethods", ex.getSupportedMethods());
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<Map<String, Object>> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex, WebRequest request) {
+        log.warn("Content type '{}' not supported. Supported media types: {}", ex.getContentType(), ex.getSupportedMediaTypes());
+        
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("status", HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
+        errorResponse.put("error", "Unsupported Media Type");
+        errorResponse.put("message", "Content-Type '" + ex.getContentType() + "' is not supported");
+        errorResponse.put("path", request.getDescription(false).replace("uri=", ""));
+        errorResponse.put("supportedMediaTypes", ex.getSupportedMediaTypes());
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 }
