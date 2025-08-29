@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public class DiscountService {
 
     private final MongoTemplate mongoTemplate;
-    private final Logger log = org.slf4j.LoggerFactory.getLogger(DiscountService.class);
 
     @Autowired
     public DiscountService(MongoTemplate mongoTemplate) {
@@ -26,12 +25,9 @@ public class DiscountService {
     }
     public BillDTO processBill(BillRequest billRequest) {
 
-        // Calculate discount
         BillDTO billDTO = this.calculateDiscount(billRequest);
 
         Bill savedBill = mongoTemplate.save(BillMapper.INSTANCE.billDTOToBill(billDTO));
-
-        log.info("Bill saved with ID: {}", savedBill.getId());
 
         billDTO.setId(savedBill.getId());
 
@@ -39,9 +35,6 @@ public class DiscountService {
     }
 
     public BillDTO calculateDiscount(BillRequest billRequest) {
-
-
-        log.info("Calculating discount for bill with total amount: {}", billRequest);
 
 
         BigDecimal originalAmount = billRequest.getItems()
@@ -62,7 +55,7 @@ public class DiscountService {
 
             discountAmount = BigDecimal.ZERO;
 
-            BigDecimal netAmount = originalAmount.subtract(customerTypeDiscount);
+            BigDecimal netAmount = originalAmount.compareTo(BigDecimal.ZERO)> 0 ? originalAmount.subtract(customerTypeDiscount):BigDecimal.ZERO;
 
             return BillMapper.INSTANCE.buildBillDTO(billRequest,customerTypeDiscount,discountAmount,originalAmount,netAmount);
         }
