@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sa.store.retaildiscount.dto.BillDTO;
 import sa.store.retaildiscount.dto.BillRequest;
 import sa.store.retaildiscount.entity.Bill;
+import sa.store.retaildiscount.enums.CustomerTypeEnum;
 import sa.store.retaildiscount.mapper.BillMapper;
 import sa.store.retaildiscount.utils.DateTimeUtility;
 
@@ -18,6 +19,8 @@ public class DiscountService {
 
     private final MongoTemplate mongoTemplate;
 
+
+
     @Autowired
     public DiscountService(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
@@ -26,7 +29,7 @@ public class DiscountService {
 
         BillDTO billDTO = this.calculateDiscount(billRequest);
 
-        Bill savedBill = mongoTemplate.save(BillMapper.INSTANCE.billDTOToBill(billDTO));
+        Bill savedBill = mongoTemplate.save(BillMapper.INSTANCE.billDTOToBillEntity(billDTO));
 
         billDTO.setId(savedBill.getId());
 
@@ -43,7 +46,7 @@ public class DiscountService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
 
-        BigDecimal discountAmount = originalAmount.divide(new BigDecimal(100), RoundingMode.FLOOR)
+        BigDecimal bulkDiscountAmount = originalAmount.divide(new BigDecimal(100), RoundingMode.FLOOR)
                 .setScale(0, RoundingMode.FLOOR)
                 .multiply(new BigDecimal(5));
 
@@ -55,24 +58,24 @@ public class DiscountService {
 
         if(originalAmount.compareTo(new BigDecimal(100)) <= 0) {
 
-            discountAmount = BigDecimal.ZERO;
+            bulkDiscountAmount = BigDecimal.ZERO;
 
             BigDecimal netAmount = originalAmount.compareTo(BigDecimal.ZERO)> 0 ? originalAmount.subtract(customerTypeDiscount):BigDecimal.ZERO;
 
-            return BillMapper.INSTANCE.buildBillDTO(billRequest,customerTypeDiscount,discountAmount,originalAmount,netAmount);
+            return BillMapper.INSTANCE.buildBillDTO(billRequest,customerTypeDiscount,bulkDiscountAmount,originalAmount,netAmount);
         }
 
-        BigDecimal netAmount = originalAmount.subtract(discountAmount.add(customerTypeDiscount));
+        BigDecimal netAmount = originalAmount.subtract(bulkDiscountAmount.add(customerTypeDiscount));
 
 
-        return BillMapper.INSTANCE.buildBillDTO(billRequest,customerTypeDiscount,discountAmount,originalAmount,netAmount);
+        return BillMapper.INSTANCE.buildBillDTO(billRequest,customerTypeDiscount,bulkDiscountAmount,originalAmount,netAmount);
     }
 
     private BigDecimal applyCustomerTypeDiscount(String customerType, LocalDateTime registrationDate, BigDecimal amount) {
 
         if (customerType == null) return BigDecimal.ZERO;
 
-        BigDecimal discount = switch (customerType.toUpperCase()) {
+        BigDecimal discount = switch (customerType) {
             case "EMPLOYEE" -> amount.multiply(new BigDecimal("0.30")).setScale(2, RoundingMode.HALF_UP);
             case "AFFILIATE" -> amount.multiply(new BigDecimal("0.10")).setScale(2, RoundingMode.HALF_UP);
             default -> BigDecimal.ZERO;

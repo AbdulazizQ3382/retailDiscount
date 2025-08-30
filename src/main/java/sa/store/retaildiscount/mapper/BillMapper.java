@@ -19,7 +19,7 @@ public interface BillMapper {
 
     BillDTO billEntityToBillDTO(Bill bill);
 
-    Bill billDTOToBill(BillDTO billDTO);
+    Bill billDTOToBillEntity(BillDTO billDTO);
 
 
     DiscountDTO discountEntityToDiscountDTO(Discount discount);
