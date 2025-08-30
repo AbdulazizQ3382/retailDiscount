@@ -10,9 +10,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
+import sa.store.retaildiscount.config.JwtUtil;
 import sa.store.retaildiscount.config.SecurityConfig;
 import sa.store.retaildiscount.dto.*;
 import sa.store.retaildiscount.service.BillService;
@@ -42,6 +44,9 @@ class BillControllerTest {
 
     @MockitoBean
     private BillService billService;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
 
     private ObjectMapper objectMapper;
     private BillRequest billRequest;
@@ -96,6 +101,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should calculate discount successfully")
     void shouldCalculateDiscountSuccessfully() throws Exception {
         // Given
@@ -130,6 +136,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should return 400 when items are null")
     void shouldReturn400WhenItemsAreNull() throws Exception {
         // Given
@@ -145,6 +152,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should return 400 when items are empty")
     void shouldReturn400WhenItemsAreEmpty() throws Exception {
         // Given
@@ -160,6 +168,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should return 400 when item has negative quantity")
     void shouldReturn400WhenItemHasNegativeQuantity() throws Exception {
         // Given
@@ -175,6 +184,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should return 400 when item has zero quantity")
     void shouldReturn400WhenItemHasZeroQuantity() throws Exception {
         // Given
@@ -190,6 +200,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should return 400 when item has null unit price")
     void shouldReturn400WhenItemHasNullUnitPrice() throws Exception {
         // Given
@@ -205,6 +216,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should return 400 when item has negative unit price")
     void shouldReturn400WhenItemHasNegativeUnitPrice() throws Exception {
         // Given
@@ -220,6 +232,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should return 400 when customer is null")
     void shouldReturn400WhenCustomerIsNull() throws Exception {
         // Given
@@ -235,6 +248,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should return 400 when customer identity is null")
     void shouldReturn400WhenCustomerIdentityIsNull() throws Exception {
         // Given
@@ -250,6 +264,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should return 400 when customer identity is empty")
     void shouldReturn400WhenCustomerIdentityIsEmpty() throws Exception {
         // Given
@@ -277,6 +292,7 @@ class BillControllerTest {
 //    }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should handle service exception")
     void shouldHandleServiceException() throws Exception {
         // Given
@@ -293,6 +309,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("GET /api/bills/{billId} - Should get bill by ID successfully")
     void shouldGetBillByIdSuccessfully() throws Exception {
         // Given
@@ -314,6 +331,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("GET /api/bills/{billId} - Should return 404 when bill not found")
     void shouldReturn404WhenBillNotFound() throws Exception {
         // Given
@@ -329,6 +347,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("GET /api/bills/customer/{customerId} - Should get bills by customer ID successfully")
     void shouldGetBillsByCustomerIdSuccessfully() throws Exception {
         // Given
@@ -352,6 +371,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("GET /api/bills/customer/{customerId} - Should get multiple bills successfully")
     void shouldGetMultipleBillsSuccessfully() throws Exception {
         // Given
@@ -384,6 +404,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("GET /api/bills/customer/{customerId} - Should return 404 when no bills found")
     void shouldReturn404WhenNoBillsFoundForCustomer() throws Exception {
         // Given
@@ -399,6 +420,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("GET /api/bills/customer/{customerId} - Should handle service exception")
     void shouldHandleServiceExceptionInGetBillsByCustomerId() throws Exception {
         // Given
@@ -414,6 +436,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("Should handle unsupported HTTP methods")
     void shouldHandleUnsupportedHttpMethods() throws Exception {
         // When & Then
@@ -428,6 +451,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("Should handle requests with wrong content type")
     void shouldHandleRequestsWithWrongContentType() throws Exception {
         // When & Then
@@ -438,6 +462,7 @@ class BillControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "password123")
     @DisplayName("Should verify request logging")
     void shouldVerifyRequestLogging() throws Exception {
         // Given
