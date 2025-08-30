@@ -88,5 +88,110 @@ Make sure SonarQube is running via Docker Compose (see step 2 above).
 ### Run SonarQube Analysis
 ```bash
 # Analyze code quality
-mvn sonar:sonar
+mvn verify sonar:sonar
 ```
+
+Access SonarQube dashboard at `http://localhost:9000`
+
+**SonarQube Configuration:**
+- Project Key: `retialDiscount`
+- Coverage exclusions: config, aspect, mapper, exception packages
+
+## API Documentation
+
+### Swagger UI
+- **URL**: `http://localhost:8080/swagger-ui.html`
+- **Root redirect**: `http://localhost:8080/` redirects to Swagger UI
+
+### Main Endpoints
+
+#### Authentication
+- `POST /auth/login` - JWT authentication
+
+#### Bill Management
+- `POST /api/bills` - Calculate discount and save bill
+- `GET /api/bills/{billId}` - Retrieve bill by ID
+- `GET /api/bills/customer/{customerId}` - Get customer bills
+
+## Monitoring
+
+### Spring Boot Actuator
+- **Base URL**: `http://localhost:8080/actuator`
+- **Health**: `/actuator/health` - Application health status
+- **Info**: `/actuator/info` - Application information  
+- **Metrics**: `/actuator/metrics` - Application metrics
+
+## Discount Business Rules
+
+The system implements the following discount logic:
+
+1. **$5 for every $100**: Applied to bills over $100 (floor division)
+2. **Customer Type Discounts**:
+   - **Employee**: 30% discount
+   - **Affiliate**: 10% discount  
+   - **Long-term Customer**: 5% discount (registered 2+ years ago)
+3. **Special Rule**: Bills under $100 only receive customer type discounts
+
+## Environment Configuration
+
+Key environment variables with defaults:
+
+```properties
+MONGODB_URI=mongodb://root:password@localhost:27017/retailDiscount?authSource=admin
+SERVER_PORT=8080
+JWT_EXPIRATION=7200000  # 2 hours in milliseconds
+MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info,metrics
+LOGGING_LEVEL_SA_STORE_RETAILDISCOUNT=INFO
+```
+
+## Database Access
+
+### MongoDB
+- **Connection**: `mongodb://root:password@localhost:27017/retailDiscount?authSource=admin`
+- **Database**: `retailDiscount`
+
+### Mongo Express (Web UI)
+- **URL**: `http://localhost:8081`
+- **Username**: `mongoexpressuser`
+- **Password**: `mongoexpresspass`
+
+## Development Commands
+
+```bash
+# Clean and build
+mvn clean package
+
+# Run with specific profile
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Skip tests during build
+mvn clean package -DskipTests
+
+# Generate sources (MapStruct)
+mvn generate-sources
+```
+
+## Project Structure
+
+```
+src/main/java/sa/store/retaildiscount/
+   controller/          # REST API endpoints
+   service/            # Business logic
+   entity/             # MongoDB entities  
+   dto/                # Data transfer objects
+   repository/         # Data access layer
+   config/             # Configuration classes
+   mapper/             # MapStruct mappers
+   utils/              # Utility classes
+   aspect/             # AOP aspects
+   exception/          # Exception handling
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **MongoDB Connection Failed**: Ensure Docker Compose services are running
+2. **Port 8080 Already in Use**: Change `SERVER_PORT` environment variable
+3. **JWT Token Expired**: Check `JWT_EXPIRATION` configuration
+4. **SonarQube Analysis Failed**: Verify SonarQube is accessible on port 9000
