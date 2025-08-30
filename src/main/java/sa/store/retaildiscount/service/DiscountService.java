@@ -1,6 +1,5 @@
 package sa.store.retaildiscount.service;
 
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -8,9 +7,9 @@ import sa.store.retaildiscount.dto.BillDTO;
 import sa.store.retaildiscount.dto.BillRequest;
 import sa.store.retaildiscount.entity.Bill;
 import sa.store.retaildiscount.mapper.BillMapper;
+import sa.store.retaildiscount.utils.DateTimeUtility;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
@@ -48,6 +47,9 @@ public class DiscountService {
                 .setScale(0, RoundingMode.FLOOR)
                 .multiply(new BigDecimal(5));
 
+
+
+        billRequest.getCustomer().setRegistrationDate(DateTimeUtility.convertDateToDateTimeFormat(billRequest.getCustomer().getRegistrationDate()));
 
         BigDecimal customerTypeDiscount = applyCustomerTypeDiscount(billRequest.getCustomer().getCustomerType(),LocalDateTime.parse(billRequest.getCustomer().getRegistrationDate()), originalAmount);
 

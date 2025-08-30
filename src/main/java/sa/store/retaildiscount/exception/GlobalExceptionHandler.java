@@ -14,6 +14,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -154,5 +155,20 @@ public class GlobalExceptionHandler {
         errorResponse.put("supportedMediaTypes", ex.getSupportedMediaTypes());
         
         return new ResponseEntity<>(errorResponse, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<Map<String, Object>> handleDateTimeParseException(DateTimeParseException ex, WebRequest request) {
+        log.warn("Invalid date/time format provided: {}", ex.getParsedString());
+        
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
+        errorResponse.put("error", "Bad Request");
+        errorResponse.put("message", "Invalid date/time format: " + ex.getParsedString());
+        errorResponse.put("path", request.getDescription(false).replace("uri=", ""));
+        errorResponse.put("expectedFormat", "Expected format: yyyy-MM-ddTHH:mm:ss (e.g., 2025-01-11T10:04:23)");
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

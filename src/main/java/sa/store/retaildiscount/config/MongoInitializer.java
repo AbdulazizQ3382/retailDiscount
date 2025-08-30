@@ -53,9 +53,9 @@ public class MongoInitializer implements CommandLineRunner {
             Discount fixedDiscount = new Discount(new BigDecimal("50"), "PRICE_DISCOUNT");
 
             Customer customer1 = new Customer("Ahmed Al-Mahmoud", "ID001", "EMPLOYEE", LocalDateTime.now().minusDays(30));
-            Customer customer2 = new Customer("Fatima Al-Zahra", "ID002", "EMPLOYEE", LocalDateTime.now().minusDays(15));
+            Customer customer2 = new Customer("Fatima Mohammad", "ID002", "EMPLOYEE", LocalDateTime.now().minusDays(15));
             Customer customer3 = new Customer("Mohammed Al-Rashid", "ID003", "AFFILIATE", LocalDateTime.now().minusDays(20));
-            Customer customer4 = new Customer("Aisha Al-Nouri", "ID004", "AFFILIATE", LocalDateTime.now().minusDays(10));
+            Customer customer4 = new Customer("Aisha Khalid", "ID004", "AFFILIATE", LocalDateTime.now().minusDays(10));
 
             List<Bill> bills = Arrays.asList(
                 new Bill(null, customer1, Arrays.asList(
