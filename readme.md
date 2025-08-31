@@ -165,9 +165,6 @@ LOGGING_LEVEL_SA_STORE_RETAILDISCOUNT=INFO
 # Clean and build
 mvn clean package
 
-# Run with specific profile
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
-
 # Skip tests during build
 mvn clean package -DskipTests
 
@@ -190,12 +187,3 @@ src/main/java/sa/store/retaildiscount/
    aspect/             # AOP aspects
    exception/          # Exception handling
 ```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **MongoDB Connection Failed**: Ensure Docker Compose services are running
-2. **Port 8080 Already in Use**: Change `SERVER_PORT` environment variable
-3. **JWT Token Expired**: Check `JWT_EXPIRATION` configuration
-4. **SonarQube Analysis Failed**: Verify SonarQube is accessible on port 9000
