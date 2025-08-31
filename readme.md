@@ -107,6 +107,12 @@ Access SonarQube dashboard at `http://localhost:9000`
 - **URL**: `http://localhost:8080/swagger-ui.html`
 - **Root redirect**: `http://localhost:8080/` redirects to Swagger UI
 
+### Postman Collection
+A Postman collection is available in the `resources` directory for testing the API endpoints.
+
+![alt text](https://github.com/AbdulazizQ3382/retailDiscount/blob/master/src/main/resources/retailDiscount.postman_collection.json)
+
+
 ### Main Endpoints
 
 #### Authentication

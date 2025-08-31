@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "40cbf3a3-dec8-42fa-b87e-1b1446ea285e",
+		"name": "retailDiscount",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30213996"
+	},
+	"item": [
+		{
+			"name": "create bill",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1NjU4MjE2NiwiZXhwIjoxNzU2NjY4NTY2fQ.erwLQVZeofEiGmqSbDwLeHfesr0jZVKbu_7_Ac32I8Q",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer\":{\r\n        \"identity\":\"<StringValue>\",\r\n        \"name\":\"Mohammad alqahtani\",\r\n        \"customerType\":\"EMPLOYEE\",\r\n        \"registrationDate\":\"2021-12-20\"\r\n    },\r\n    \"items\": [\r\n      {\r\n        \"productName\": \"USB Cable2\",\r\n        \"unitPrice\": 0,\r\n        \"quantity\": 1.24345\r\n      },\r\n      {\r\n        \"productName\": \"ipad\",\r\n        \"unitPrice\": 4434.50,\r\n        \"quantity\": 1.24345\r\n      }\r\n    ]\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/bills",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get bill",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1NjU1MzQ3OCwiZXhwIjoxNzU2NjM5ODc4fQ.34nrs_gqjxK6NTJmpWce84FfNlkw2ybUEL8R9ldxPYs",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\": \"68b357840afb800cc8747fee\",\r\n    \"items\": [\r\n      {\r\n        \"productName\": \"Gaming Laptop\",\r\n        \"unitPrice\": 2500.00,\r\n        \"quantity\": 1\r\n      },\r\n      {\r\n        \"productName\": \"Wireless Mouse\",\r\n        \"unitPrice\": 150.00,\r\n        \"quantity\": 2\r\n      },\r\n      {\r\n        \"productName\": \"USB Cable\",\r\n        \"unitPrice\": 25.50,\r\n        \"quantity\": 3\r\n      }\r\n    ]\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/bills/68b4a6e15dff36362889e38b",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"bills",
+						"68b4a6e15dff36362889e38b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get bills by customer",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/bills/customer/<StringValue>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bills",
+						"customer",
+						"<StringValue>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authenticate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"username\":\"admin\",\r\n    \"password\":\"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/auth/authenticate",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1NjY2NzEzMSwiZXhwIjoxNzU2Njc0MzMxfQ.CEIr6sfumXSTO7iuCE1znGBo7T9GgyDbn_ZDc40fJfxX6cWH0XrOMl_9ewKfZdO1",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": ""
+		}
+	]
+}
