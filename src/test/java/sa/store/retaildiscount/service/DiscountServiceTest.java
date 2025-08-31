@@ -104,7 +104,6 @@ class DiscountServiceTest {
         assertNotNull(result);
         assertEquals("affiliateId123", result.getId());
         assertEquals(new BigDecimal("1100.00"), result.getTotalAmount());
-        // Affiliate gets 10% discount + $50 bulk discount = $110 + $50 = $160
         assertEquals(new BigDecimal("935.00"), result.getNetPayableAmount());
         
         verify(mongoTemplate, times(1)).save(any(Bill.class));
@@ -127,7 +126,6 @@ class DiscountServiceTest {
         assertNotNull(result);
         assertEquals("regularId123", result.getId());
         assertEquals(new BigDecimal("1100.00"), result.getTotalAmount());
-        // Regular customer over 2 years gets 5% discount + $50 bulk discount = $55 + $50 = $105
         assertEquals(new BigDecimal("990.00"), result.getNetPayableAmount());
         
         verify(mongoTemplate, times(1)).save(any(Bill.class));
@@ -150,7 +148,6 @@ class DiscountServiceTest {
         assertNotNull(result);
         assertEquals("regularNewId123", result.getId());
         assertEquals(new BigDecimal("1100.00"), result.getTotalAmount());
-        // Regular customer under 2 years gets no customer discount + $50 bulk discount = $50
         assertEquals(new BigDecimal("1045.00"), result.getNetPayableAmount());
         
         verify(mongoTemplate, times(1)).save(any(Bill.class));
@@ -177,7 +174,6 @@ class DiscountServiceTest {
         assertNotNull(result);
         assertEquals("smallBillId123", result.getId());
         assertEquals(new BigDecimal("70.00"), result.getTotalAmount());
-        // Employee gets 30% discount, no bulk discount = $70 - $21 = $49
         assertEquals(new BigDecimal("49.00"), result.getNetPayableAmount());
         
         verify(mongoTemplate, times(1)).save(any(Bill.class));
@@ -200,7 +196,6 @@ class DiscountServiceTest {
         assertNotNull(result);
         assertEquals("nullCustomerTypeId", result.getId());
         assertEquals(new BigDecimal("1100.00"), result.getTotalAmount());
-        // No customer discount + $50 bulk discount = $50
         assertEquals(new BigDecimal("1045.00"), result.getNetPayableAmount());
         
         verify(mongoTemplate, times(1)).save(any(Bill.class));
