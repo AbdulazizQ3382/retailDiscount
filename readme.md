@@ -2,6 +2,10 @@
 
 A Spring Boot application that calculates and applies various discount rules for customer bills with JWT-based authentication and comprehensive discount logic.
 
+## UML class diagram : 
+
+![alt text](https://github.com/AbdulazizQ3382/retailDiscount/blob/master/src/main/resources/static/retail-class-diagram.png)
+
 ## Project Requirements
 
 ### System Requirements
