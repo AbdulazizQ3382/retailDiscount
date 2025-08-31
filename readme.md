@@ -116,7 +116,8 @@ A Postman collection is available in the `resources` directory for testing the A
 ### Main Endpoints
 
 #### Authentication
-- `POST /auth/login` - JWT authentication
+- `POST api/auth/authenticate` - JWT authentication
+  - Request Body: `{ "username": "admin", "password": "password123" }`
 
 #### Bill Management
 - `POST /api/bills` - Calculate discount and save bill
