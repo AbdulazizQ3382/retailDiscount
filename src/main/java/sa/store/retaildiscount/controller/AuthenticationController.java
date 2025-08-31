@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sa.store.retaildiscount.dto.AuthenticationRequest;
 import sa.store.retaildiscount.dto.AuthenticationResponse;
+import sa.store.retaildiscount.dto.GenericResponse;
 import sa.store.retaildiscount.service.AuthenticationService;
 
 @RestController
@@ -19,8 +20,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        AuthenticationResponse response = authenticationService.authenticate(request);
-        return ResponseEntity.ok(response);
+    public GenericResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        return GenericResponse.success(authenticationService.authenticate(request));
     }
 }

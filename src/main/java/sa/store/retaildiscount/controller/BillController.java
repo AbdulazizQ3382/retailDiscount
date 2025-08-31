@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import sa.store.retaildiscount.dto.BillDTO;
 import sa.store.retaildiscount.dto.BillRequest;
+import sa.store.retaildiscount.dto.GenericResponse;
 import sa.store.retaildiscount.service.BillService;
 import sa.store.retaildiscount.service.DiscountService;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/bills")
@@ -26,9 +28,7 @@ public class BillController {
 
 
     @PostMapping("")
-    public ResponseEntity<BillDTO> calculateDiscount(@RequestBody BillRequest billRequest) {
-
-        //todo : add wrapper response class
+    public GenericResponse<BillDTO> calculateDiscount(@RequestBody BillRequest billRequest) {
 
         if(billRequest.getItems() == null || billRequest.getItems().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bill items are required");
@@ -47,19 +47,18 @@ public class BillController {
         }
 
             BillDTO response = discountService.processBill(billRequest);
-            return ResponseEntity.ok(response);
+            return GenericResponse.success(response);
     }
 
     @GetMapping("{billId}")
-    public ResponseEntity<BillDTO> getBillById(@PathVariable String billId) {
-        BillDTO bill = billService.getBillById(billId);
-        return ResponseEntity.ok(bill);
+    public GenericResponse<BillDTO> getBillById(@PathVariable String billId) {
+        return GenericResponse.success(billService.getBillById(billId));
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<BillDTO>> getBillsByCustomerId(@PathVariable String customerId) {
+    public GenericResponse<List<BillDTO>> getBillsByCustomerId(@PathVariable String customerId) {
         // todo: pageable default
-        List<BillDTO> bills = billService.getBillsByCustomerId(customerId);
-        return ResponseEntity.ok(bills);
+        
+        return GenericResponse.success(billService.getBillsByCustomerId(customerId));
     }
 }

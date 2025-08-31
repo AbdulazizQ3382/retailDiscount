@@ -9,7 +9,9 @@ import sa.store.retaildiscount.entity.Bill;
 import sa.store.retaildiscount.entity.Discount;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Mapper(componentModel = "spring")
 public interface BillMapper {
@@ -25,6 +27,10 @@ public interface BillMapper {
     DiscountDTO discountEntityToDiscountDTO(Discount discount);
 
     default BillDTO buildBillDTO(BillRequest billRequest, BigDecimal customerTypeDiscount, BigDecimal priceDiscount, BigDecimal totalAmount , BigDecimal... netPayableAmount) {
+
+        var discountPerc = Stream.of(customerTypeDiscount,priceDiscount)
+                .map(d -> discountAmountToPercentage(d,totalAmount)).toList();
+
         return BillDTO.builder()
                 .customer(billRequest.getCustomer())
                 .items(billRequest.getItems())
@@ -33,14 +39,23 @@ public interface BillMapper {
                 .billDate(java.time.LocalDateTime.now())
                 .discount(List.of(
                         DiscountDTO.builder()
-                                .discountAmount(customerTypeDiscount)
-                                .discountType("CUSTOMER_TYPE_DISCOUNT")
+                                .amount(customerTypeDiscount)
+                                .type("CUSTOMER_TYPE_DISCOUNT")
+                                .percentage(discountPerc.get(0))
                                 .build(),
                         DiscountDTO.builder()
-                                .discountAmount(priceDiscount)
-                                .discountType("PRICE_DISCOUNT")
+                                .amount(priceDiscount)
+                                .type("PRICE_DISCOUNT")
+                                .percentage(discountPerc.get(1))
                                 .build()
                 ))
                 .build();
+    }
+    
+    default String discountAmountToPercentage(BigDecimal discountAmount, BigDecimal totalAmount) {
+        if(totalAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return "0%";
+        }
+        return discountAmount.divide(totalAmount,2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100))+"%";
     }
 }

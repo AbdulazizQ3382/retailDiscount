@@ -48,9 +48,9 @@ public class MongoInitializer implements CommandLineRunner {
             log.info("Creating bills collection and inserting sample documents...");
             
             // Create sample discounts for nested data
-            Discount electronicsDiscount = new Discount(new BigDecimal("10"), "CUSTOMER_TYPE_DISCOUNT");
-            Discount clothingDiscount = new Discount(new BigDecimal("20"), "CUSTOMER_TYPE_DISCOUNT");
-            Discount fixedDiscount = new Discount(new BigDecimal("50"), "PRICE_DISCOUNT");
+            Discount electronicsDiscount = new Discount(new BigDecimal("10"), "CUSTOMER_TYPE_DISCOUNT", null);
+            Discount clothingDiscount = new Discount(new BigDecimal("20"), "CUSTOMER_TYPE_DISCOUNT", null);
+            Discount fixedDiscount = new Discount(new BigDecimal("50"), "PRICE_DISCOUNT", null);
 
             Customer customer1 = new Customer("Ahmed Al-Mahmoud", "ID001", "EMPLOYEE", LocalDateTime.now().minusDays(30));
             Customer customer2 = new Customer("Fatima Mohammad", "ID002", "EMPLOYEE", LocalDateTime.now().minusDays(15));

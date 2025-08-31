@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class DiscountDTO {
-    private BigDecimal discountAmount;
-    private String discountType;
+    private BigDecimal amount;
+    private String type;
+    private String percentage;
 }

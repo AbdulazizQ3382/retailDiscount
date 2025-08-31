@@ -80,12 +80,12 @@ class BillControllerTest {
 
         List<DiscountDTO> discounts = Arrays.asList(
                 DiscountDTO.builder()
-                        .discountAmount(new BigDecimal("330.00"))
-                        .discountType("CUSTOMER_TYPE_DISCOUNT")
+                        .amount(new BigDecimal("330.00"))
+                        .type("CUSTOMER_TYPE_DISCOUNT")
                         .build(),
                 DiscountDTO.builder()
-                        .discountAmount(new BigDecimal("55.00"))
-                        .discountType("PRICE_DISCOUNT")
+                        .amount(new BigDecimal("55.00"))
+                        .type("PRICE_DISCOUNT")
                         .build()
         );
 
@@ -113,24 +113,24 @@ class BillControllerTest {
                         .content(objectMapper.writeValueAsString(billRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is("bill123")))
-                .andExpect(jsonPath("$.customer.identity", is("ID001")))
-                .andExpect(jsonPath("$.customer.name", is("John Doe")))
-                .andExpect(jsonPath("$.customer.customerType", is("EMPLOYEE")))
-                .andExpect(jsonPath("$.totalAmount", is(1100.00)))
-                .andExpect(jsonPath("$.netPayableAmount", is(715.00)))
-                .andExpect(jsonPath("$.items", hasSize(2)))
-                .andExpect(jsonPath("$.items[0].productName", is("Gaming Laptop")))
-                .andExpect(jsonPath("$.items[0].unitPrice", is(1000.00)))
-                .andExpect(jsonPath("$.items[0].quantity", is(1.0)))
-                .andExpect(jsonPath("$.items[1].productName", is("Wireless Mouse")))
-                .andExpect(jsonPath("$.items[1].unitPrice", is(50.00)))
-                .andExpect(jsonPath("$.items[1].quantity", is(2.0)))
-                .andExpect(jsonPath("$.discount", hasSize(2)))
-                .andExpect(jsonPath("$.discount[0].discountAmount", is(330.00)))
-                .andExpect(jsonPath("$.discount[0].discountType", is("CUSTOMER_TYPE_DISCOUNT")))
-                .andExpect(jsonPath("$.discount[1].discountAmount", is(55.00)))
-                .andExpect(jsonPath("$.discount[1].discountType", is("PRICE_DISCOUNT")));
+                .andExpect(jsonPath("$.data.id", is("bill123")))
+                .andExpect(jsonPath("$.data.customer.identity", is("ID001")))
+                .andExpect(jsonPath("$.data.customer.name", is("John Doe")))
+                .andExpect(jsonPath("$.data.customer.customerType", is("EMPLOYEE")))
+                .andExpect(jsonPath("$.data.totalAmount", is(1100.00)))
+                .andExpect(jsonPath("$.data.netPayableAmount", is(715.00)))
+                .andExpect(jsonPath("$.data.items", hasSize(2)))
+                .andExpect(jsonPath("$.data.items[0].productName", is("Gaming Laptop")))
+                .andExpect(jsonPath("$.data.items[0].unitPrice", is(1000.00)))
+                .andExpect(jsonPath("$.data.items[0].quantity", is(1.0)))
+                .andExpect(jsonPath("$.data.items[1].productName", is("Wireless Mouse")))
+                .andExpect(jsonPath("$.data.items[1].unitPrice", is(50.00)))
+                .andExpect(jsonPath("$.data.items[1].quantity", is(2.0)))
+                .andExpect(jsonPath("$.data.discount", hasSize(2)))
+                .andExpect(jsonPath("$.data.discount[0].amount", is(330.00)))
+                .andExpect(jsonPath("$.data.discount[0].type", is("CUSTOMER_TYPE_DISCOUNT")))
+                .andExpect(jsonPath("$.data.discount[1].amount", is(55.00)))
+                .andExpect(jsonPath("$.data.discount[1].type", is("PRICE_DISCOUNT")));
 
         verify(discountService, times(1)).processBill(any(BillRequest.class));
     }
@@ -279,18 +279,6 @@ class BillControllerTest {
         verify(discountService, never()).processBill(any(BillRequest.class));
     }
 
-//    @Test
-//    @DisplayName("POST /api/bills - Should return 400 with malformed JSON")
-//    void shouldReturn400WithMalformedJSON() throws Exception {
-//        // When & Then
-//        mockMvc.perform(post("/api/bills")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{'invalid json}'"))
-//                .andExpect(status().isBadRequest());
-//
-//        verify(discountService, never()).processBill(any(BillRequest.class));
-//    }
-
     @Test
     @WithMockUser(username = "admin", password = "password123")
     @DisplayName("POST /api/bills - Should handle service exception")
@@ -320,12 +308,12 @@ class BillControllerTest {
         mockMvc.perform(get("/api/bills/{billId}", billId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is("bill123")))
-                .andExpect(jsonPath("$.customer.identity", is("ID001")))
-                .andExpect(jsonPath("$.customer.name", is("John Doe")))
-                .andExpect(jsonPath("$.totalAmount", is(1100.00)))
-                .andExpect(jsonPath("$.netPayableAmount", is(715.00)))
-                .andExpect(jsonPath("$.items", hasSize(2)));
+                .andExpect(jsonPath("$.data.id", is("bill123")))
+                .andExpect(jsonPath("$.data.customer.identity", is("ID001")))
+                .andExpect(jsonPath("$.data.customer.name", is("John Doe")))
+                .andExpect(jsonPath("$.data.totalAmount", is(1100.00)))
+                .andExpect(jsonPath("$.data.netPayableAmount", is(715.00)))
+                .andExpect(jsonPath("$.data.items", hasSize(2)));
 
         verify(billService, times(1)).getBillById(billId);
     }
@@ -359,13 +347,13 @@ class BillControllerTest {
         mockMvc.perform(get("/api/bills/customer/{customerId}", customerId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is("bill123")))
-                .andExpect(jsonPath("$[0].customer.identity", is("ID001")))
-                .andExpect(jsonPath("$[0].customer.name", is("John Doe")))
-                .andExpect(jsonPath("$[0].totalAmount", is(1100.00)))
-                .andExpect(jsonPath("$[0].netPayableAmount", is(715.00)))
-                .andExpect(jsonPath("$[0].items", hasSize(2)));
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].id", is("bill123")))
+                .andExpect(jsonPath("$.data[0].customer.identity", is("ID001")))
+                .andExpect(jsonPath("$.data[0].customer.name", is("John Doe")))
+                .andExpect(jsonPath("$.data[0].totalAmount", is(1100.00)))
+                .andExpect(jsonPath("$.data[0].netPayableAmount", is(715.00)))
+                .andExpect(jsonPath("$.data[0].items", hasSize(2)));
 
         verify(billService, times(1)).getBillsByCustomerId(customerId);
     }
@@ -394,11 +382,11 @@ class BillControllerTest {
         mockMvc.perform(get("/api/bills/customer/{customerId}", customerId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is("bill123")))
-                .andExpect(jsonPath("$[0].totalAmount", is(1100.00)))
-                .andExpect(jsonPath("$[1].id", is("bill456")))
-                .andExpect(jsonPath("$[1].totalAmount", is(500.00)));
+                .andExpect(jsonPath("$.data", hasSize(2)))
+                .andExpect(jsonPath("$.data[0].id", is("bill123")))
+                .andExpect(jsonPath("$.data[0].totalAmount", is(1100.00)))
+                .andExpect(jsonPath("$.data[1].id", is("bill456")))
+                .andExpect(jsonPath("$.data[1].totalAmount", is(500.00)));
 
         verify(billService, times(1)).getBillsByCustomerId(customerId);
     }
