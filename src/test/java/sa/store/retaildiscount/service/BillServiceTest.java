@@ -147,7 +147,7 @@ class BillServiceTest {
         List<Bill> bills = Arrays.asList(bill);
         List<BillDTO> expectedBillDTOs = Arrays.asList(billDTO);
 
-        when(billRepository.findByCustomer_Identity(customerIdentity)).thenReturn(bills);
+        when(billRepository.findByCustomer_IdentityOrderByBillDateDesc(customerIdentity)).thenReturn(bills);
         when(billMapper.billEntityToBillDTO(bill)).thenReturn(billDTO);
 
         // When
@@ -160,7 +160,7 @@ class BillServiceTest {
         assertEquals("ID001", result.get(0).getCustomer().getIdentity());
         assertEquals(new BigDecimal("1100.00"), result.get(0).getTotalAmount());
 
-        verify(billRepository, times(1)).findByCustomer_Identity(customerIdentity);
+        verify(billRepository, times(1)).findByCustomer_IdentityOrderByBillDateDesc(customerIdentity);
         verify(billMapper, times(1)).billEntityToBillDTO(bill);
     }
 
@@ -189,7 +189,7 @@ class BillServiceTest {
 
         List<Bill> bills = Arrays.asList(bill, bill2);
 
-        when(billRepository.findByCustomer_Identity(customerIdentity)).thenReturn(bills);
+        when(billRepository.findByCustomer_IdentityOrderByBillDateDesc(customerIdentity)).thenReturn(bills);
         when(billMapper.billEntityToBillDTO(bill)).thenReturn(billDTO);
         when(billMapper.billEntityToBillDTO(bill2)).thenReturn(billDTO2);
 
@@ -206,7 +206,7 @@ class BillServiceTest {
         assertEquals(new BigDecimal("1100.00"), result.get(0).getTotalAmount());
         assertEquals(new BigDecimal("500.00"), result.get(1).getTotalAmount());
 
-        verify(billRepository, times(1)).findByCustomer_Identity(customerIdentity);
+        verify(billRepository, times(1)).findByCustomer_IdentityOrderByBillDateDesc(customerIdentity);
         verify(billMapper, times(2)).billEntityToBillDTO(any(Bill.class));
     }
 
@@ -215,7 +215,7 @@ class BillServiceTest {
     void shouldThrowExceptionWhenNoBillsFoundForCustomerId() {
         // Given
         String customerIdentity = "nonexistent001";
-        when(billRepository.findByCustomer_Identity(customerIdentity)).thenReturn(Collections.emptyList());
+        when(billRepository.findByCustomer_IdentityOrderByBillDateDesc(customerIdentity)).thenReturn(Collections.emptyList());
 
         // When & Then
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
@@ -225,7 +225,7 @@ class BillServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
         assertEquals("No bills found for customer ID: nonexistent001", exception.getReason());
 
-        verify(billRepository, times(1)).findByCustomer_Identity(customerIdentity);
+        verify(billRepository, times(1)).findByCustomer_IdentityOrderByBillDateDesc(customerIdentity);
         verify(billMapper, never()).billEntityToBillDTO(any(Bill.class));
     }
 
@@ -250,7 +250,7 @@ class BillServiceTest {
     void shouldHandleRepositoryExceptionInGetBillsByCustomerId() {
         // Given
         String customerIdentity = "ID001";
-        when(billRepository.findByCustomer_Identity(customerIdentity))
+        when(billRepository.findByCustomer_IdentityOrderByBillDateDesc(customerIdentity))
                 .thenThrow(new RuntimeException("Database connection error"));
 
         // When & Then
@@ -258,7 +258,7 @@ class BillServiceTest {
             billService.getBillsByCustomerId(customerIdentity);
         });
 
-        verify(billRepository, times(1)).findByCustomer_Identity(customerIdentity);
+        verify(billRepository, times(1)).findByCustomer_IdentityOrderByBillDateDesc(customerIdentity);
         verify(billMapper, never()).billEntityToBillDTO(any(Bill.class));
     }
 
@@ -305,14 +305,14 @@ class BillServiceTest {
         // Given
         String customerIdentity = "TEST_ID_001";
         List<Bill> bills = Arrays.asList(bill);
-        when(billRepository.findByCustomer_Identity(customerIdentity)).thenReturn(bills);
+        when(billRepository.findByCustomer_IdentityOrderByBillDateDesc(customerIdentity)).thenReturn(bills);
         when(billMapper.billEntityToBillDTO(any(Bill.class))).thenReturn(billDTO);
 
         // When
         List<BillDTO> result = billService.getBillsByCustomerId(customerIdentity);
 
         // Then
-        verify(billRepository).findByCustomer_Identity(eq(customerIdentity));
+        verify(billRepository).findByCustomer_IdentityOrderByBillDateDesc(eq(customerIdentity));
         assertNotNull(result);
         assertEquals(1, result.size());
     }

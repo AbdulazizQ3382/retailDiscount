@@ -10,7 +10,6 @@ import sa.store.retaildiscount.mapper.BillMapper;
 import sa.store.retaildiscount.repository.BillRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +33,7 @@ public class BillService {
 
     public List<BillDTO> getBillsByCustomerId(String customerIdentity) {
 
-        List<Bill> bills = billRepository.findByCustomer_Identity(customerIdentity);
+        List<Bill> bills = billRepository.findByCustomer_IdentityOrderByBillDateDesc(customerIdentity);
 
         if(bills.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No bills found for customer ID: " + customerIdentity);
