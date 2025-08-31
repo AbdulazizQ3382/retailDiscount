@@ -46,6 +46,9 @@ public class BillController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer identity is required");
         }
 
+        if(!billRequest.getCustomer().getIdentity().matches("^[a-zA-Z0-9]+$")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer identity must be numeric");
+        }
             BillDTO response = discountService.processBill(billRequest);
             return GenericResponse.success(response);
     }

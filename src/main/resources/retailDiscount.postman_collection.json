@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"customer\":{\r\n        \"identity\":\"<StringValue>\",\r\n        \"name\":\"Mohammad alqahtani\",\r\n        \"customerType\":\"EMPLOYEE\",\r\n        \"registrationDate\":\"2021-12-20\"\r\n    },\r\n    \"items\": [\r\n      {\r\n        \"productName\": \"USB Cable2\",\r\n        \"unitPrice\": 0,\r\n        \"quantity\": 1.24345\r\n      },\r\n      {\r\n        \"productName\": \"ipad\",\r\n        \"unitPrice\": 4434.50,\r\n        \"quantity\": 1.24345\r\n      }\r\n    ]\r\n  }",
+					"raw": "{\r\n    \"customer\":{\r\n        \"identity\":\"AQ1231231232\",\r\n        \"name\":\"Mohammad alqahtani\",\r\n        \"customerType\":\"EMPLOYEE\",\r\n        \"registrationDate\":\"2021-12-20\"\r\n    },\r\n    \"items\": [\r\n      {\r\n        \"productName\": \"USB Cable2\",\r\n        \"unitPrice\": 70,\r\n        \"quantity\": 20\r\n      },\r\n      {\r\n        \"productName\": \"ipad\",\r\n        \"unitPrice\": 4434.50,\r\n        \"quantity\": 2\r\n      }\r\n    ]\r\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -65,14 +65,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseURL}}/api/bills/68b4a6e15dff36362889e38b",
+					"raw": "{{baseURL}}/api/bills/68b4bcafa08881164c43d248",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"api",
 						"bills",
-						"68b4a6e15dff36362889e38b"
+						"68b4bcafa08881164c43d248"
 					]
 				}
 			},
@@ -96,7 +96,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/bills/customer/<StringValue>",
+					"raw": "http://localhost:8080/api/bills/customer/AQ1231231232",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -106,7 +106,7 @@
 						"api",
 						"bills",
 						"customer",
-						"<StringValue>"
+						"AQ1231231232"
 					]
 				}
 			},
@@ -146,7 +146,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1NjY2NzEzMSwiZXhwIjoxNzU2Njc0MzMxfQ.CEIr6sfumXSTO7iuCE1znGBo7T9GgyDbn_ZDc40fJfxX6cWH0XrOMl_9ewKfZdO1",
+				"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1NjY3NDc0NCwiZXhwIjoxNzU2NjgxOTQ0fQ.iRzCUe6O98-WZCShHu7rfvJAIs7vQlKvR5INje8BuJF8FFyBSG32JVdR7McxSEgQ",
 				"type": "string"
 			}
 		]
