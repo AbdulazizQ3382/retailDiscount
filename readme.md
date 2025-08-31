@@ -1,4 +1,4 @@
-# Retail Discount System
+# Retail Discount Service
 
 A Spring Boot application that calculates and applies various discount rules for customer bills with JWT-based authentication and comprehensive discount logic.
 
@@ -8,7 +8,7 @@ A Spring Boot application that calculates and applies various discount rules for
 
 ## Project Requirements
 
-### System Requirements
+### Service Requirements
 - **Java**: 21 or higher
 - **Maven**: 3.6+ 
 - **Docker**: For running dependencies (MongoDB, SonarQube)
